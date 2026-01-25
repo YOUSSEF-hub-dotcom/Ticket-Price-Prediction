@@ -1,0 +1,264 @@
+2026-01-24 14:13:38,208 [INFO] TicketAPI: Received prediction request for Airline: Air India
+2026-01-24 14:13:38,256 [ERROR] TicketAPI: Error during prediction pipeline: Failed to enforce schema of data '     Airline Source Destination  ... is_weekend  Is_Long_Flight  is_peak_season
+0  Air India  Delhi      Mumbai  ...          1               0               0
+
+[1 rows x 14 columns]' with schema '['Airline': string (required), 'Source': string (required), 'Destination': string (required), 'Dep_Session': string (required), 'Total_Stops': double (required), 'Dep_hour': integer (required), 'Arrival_hour': integer (required), 'Duration_mins': long (required), 'Month_of_Journey': integer (required), 'Days_of_Journey': integer (required), 'Day_of_Week': integer (required), 'is_weekend': long (required), 'Is_Long_Flight': long (required), 'is_peak_season': long (required)]'. Error: Incompatible input types for column Total_Stops. Can not safely convert int64 to float64.
+Traceback (most recent call last):
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\pyfunc\__init__.py", line 732, in _validate_prediction_input
+    data = _enforce_schema(data, input_schema, flavor)
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\models\utils.py", line 1281, in _enforce_schema
+    _enforce_named_col_schema(pf_input, input_schema)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\models\utils.py", line 976, in _enforce_named_col_schema
+    new_pf_input[name] = _enforce_mlflow_datatype(name, pf_input[name], input_type)
+                         ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\models\utils.py", line 868, in _enforce_mlflow_datatype
+    raise MlflowException(
+    ...<2 lines>...
+    )
+mlflow.exceptions.MlflowException: Incompatible input types for column Total_Stops. Can not safely convert int64 to float64.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\ALL Projects\Ticket\api.py", line 184, in predict
+    prediction = model.predict(input_df)
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\pyfunc\__init__.py", line 843, in predict
+    return self._predict(data, params)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\pyfunc\__init__.py", line 882, in _predict
+    data, params = _validate_prediction_input(
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        data, params, self.input_schema, self.params_schema, self.loader_module
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\pyfunc\__init__.py", line 743, in _validate_prediction_input
+    raise MlflowException.invalid_parameter_value(message)
+mlflow.exceptions.MlflowException: Failed to enforce schema of data '     Airline Source Destination  ... is_weekend  Is_Long_Flight  is_peak_season
+0  Air India  Delhi      Mumbai  ...          1               0               0
+
+[1 rows x 14 columns]' with schema '['Airline': string (required), 'Source': string (required), 'Destination': string (required), 'Dep_Session': string (required), 'Total_Stops': double (required), 'Dep_hour': integer (required), 'Arrival_hour': integer (required), 'Duration_mins': long (required), 'Month_of_Journey': integer (required), 'Days_of_Journey': integer (required), 'Day_of_Week': integer (required), 'is_weekend': long (required), 'Is_Long_Flight': long (required), 'is_peak_season': long (required)]'. Error: Incompatible input types for column Total_Stops. Can not safely convert int64 to float64.
+2026-01-24 14:17:46,555 [INFO] TicketAPI: Received prediction request for Airline: Air India
+2026-01-24 14:17:46,560 [ERROR] TicketAPI: Error during prediction pipeline: Failed to enforce schema of data '      0
+0  None' with schema '['Airline': string (required), 'Source': string (required), 'Destination': string (required), 'Dep_Session': string (required), 'Total_Stops': double (required), 'Dep_hour': integer (required), 'Arrival_hour': integer (required), 'Duration_mins': long (required), 'Month_of_Journey': integer (required), 'Days_of_Journey': integer (required), 'Day_of_Week': integer (required), 'is_weekend': long (required), 'Is_Long_Flight': long (required), 'is_peak_season': long (required)]'. Error: Model is missing inputs ['Airline', 'Source', 'Destination', 'Dep_Session', 'Total_Stops', 'Dep_hour', 'Arrival_hour', 'Duration_mins', 'Month_of_Journey', 'Days_of_Journey', 'Day_of_Week', 'is_weekend', 'Is_Long_Flight', 'is_peak_season']. Note that there were extra inputs: [0].
+Traceback (most recent call last):
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\pyfunc\__init__.py", line 732, in _validate_prediction_input
+    data = _enforce_schema(data, input_schema, flavor)
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\models\utils.py", line 1255, in _enforce_schema
+    raise MlflowException(message)
+mlflow.exceptions.MlflowException: Model is missing inputs ['Airline', 'Source', 'Destination', 'Dep_Session', 'Total_Stops', 'Dep_hour', 'Arrival_hour', 'Duration_mins', 'Month_of_Journey', 'Days_of_Journey', 'Day_of_Week', 'is_weekend', 'Is_Long_Flight', 'is_peak_season']. Note that there were extra inputs: [0].
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\ALL Projects\Ticket\api.py", line 187, in predict
+    prediction = model.predict(input_df)
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\pyfunc\__init__.py", line 843, in predict
+    return self._predict(data, params)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\pyfunc\__init__.py", line 882, in _predict
+    data, params = _validate_prediction_input(
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        data, params, self.input_schema, self.params_schema, self.loader_module
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\pyfunc\__init__.py", line 743, in _validate_prediction_input
+    raise MlflowException.invalid_parameter_value(message)
+mlflow.exceptions.MlflowException: Failed to enforce schema of data '      0
+0  None' with schema '['Airline': string (required), 'Source': string (required), 'Destination': string (required), 'Dep_Session': string (required), 'Total_Stops': double (required), 'Dep_hour': integer (required), 'Arrival_hour': integer (required), 'Duration_mins': long (required), 'Month_of_Journey': integer (required), 'Days_of_Journey': integer (required), 'Day_of_Week': integer (required), 'is_weekend': long (required), 'Is_Long_Flight': long (required), 'is_peak_season': long (required)]'. Error: Model is missing inputs ['Airline', 'Source', 'Destination', 'Dep_Session', 'Total_Stops', 'Dep_hour', 'Arrival_hour', 'Duration_mins', 'Month_of_Journey', 'Days_of_Journey', 'Day_of_Week', 'is_weekend', 'Is_Long_Flight', 'is_peak_season']. Note that there were extra inputs: [0].
+2026-01-24 14:17:49,390 [INFO] TicketAPI: Received prediction request for Airline: Air India
+2026-01-24 14:17:49,394 [ERROR] TicketAPI: Error during prediction pipeline: Failed to enforce schema of data '      0
+0  None' with schema '['Airline': string (required), 'Source': string (required), 'Destination': string (required), 'Dep_Session': string (required), 'Total_Stops': double (required), 'Dep_hour': integer (required), 'Arrival_hour': integer (required), 'Duration_mins': long (required), 'Month_of_Journey': integer (required), 'Days_of_Journey': integer (required), 'Day_of_Week': integer (required), 'is_weekend': long (required), 'Is_Long_Flight': long (required), 'is_peak_season': long (required)]'. Error: Model is missing inputs ['Airline', 'Source', 'Destination', 'Dep_Session', 'Total_Stops', 'Dep_hour', 'Arrival_hour', 'Duration_mins', 'Month_of_Journey', 'Days_of_Journey', 'Day_of_Week', 'is_weekend', 'Is_Long_Flight', 'is_peak_season']. Note that there were extra inputs: [0].
+Traceback (most recent call last):
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\pyfunc\__init__.py", line 732, in _validate_prediction_input
+    data = _enforce_schema(data, input_schema, flavor)
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\models\utils.py", line 1255, in _enforce_schema
+    raise MlflowException(message)
+mlflow.exceptions.MlflowException: Model is missing inputs ['Airline', 'Source', 'Destination', 'Dep_Session', 'Total_Stops', 'Dep_hour', 'Arrival_hour', 'Duration_mins', 'Month_of_Journey', 'Days_of_Journey', 'Day_of_Week', 'is_weekend', 'Is_Long_Flight', 'is_peak_season']. Note that there were extra inputs: [0].
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\ALL Projects\Ticket\api.py", line 187, in predict
+    prediction = model.predict(input_df)
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\pyfunc\__init__.py", line 843, in predict
+    return self._predict(data, params)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\pyfunc\__init__.py", line 882, in _predict
+    data, params = _validate_prediction_input(
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        data, params, self.input_schema, self.params_schema, self.loader_module
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\pyfunc\__init__.py", line 743, in _validate_prediction_input
+    raise MlflowException.invalid_parameter_value(message)
+mlflow.exceptions.MlflowException: Failed to enforce schema of data '      0
+0  None' with schema '['Airline': string (required), 'Source': string (required), 'Destination': string (required), 'Dep_Session': string (required), 'Total_Stops': double (required), 'Dep_hour': integer (required), 'Arrival_hour': integer (required), 'Duration_mins': long (required), 'Month_of_Journey': integer (required), 'Days_of_Journey': integer (required), 'Day_of_Week': integer (required), 'is_weekend': long (required), 'Is_Long_Flight': long (required), 'is_peak_season': long (required)]'. Error: Model is missing inputs ['Airline', 'Source', 'Destination', 'Dep_Session', 'Total_Stops', 'Dep_hour', 'Arrival_hour', 'Duration_mins', 'Month_of_Journey', 'Days_of_Journey', 'Day_of_Week', 'is_weekend', 'Is_Long_Flight', 'is_peak_season']. Note that there were extra inputs: [0].
+2026-01-24 14:17:50,772 [INFO] TicketAPI: Received prediction request for Airline: Air India
+2026-01-24 14:17:50,775 [ERROR] TicketAPI: Error during prediction pipeline: Failed to enforce schema of data '      0
+0  None' with schema '['Airline': string (required), 'Source': string (required), 'Destination': string (required), 'Dep_Session': string (required), 'Total_Stops': double (required), 'Dep_hour': integer (required), 'Arrival_hour': integer (required), 'Duration_mins': long (required), 'Month_of_Journey': integer (required), 'Days_of_Journey': integer (required), 'Day_of_Week': integer (required), 'is_weekend': long (required), 'Is_Long_Flight': long (required), 'is_peak_season': long (required)]'. Error: Model is missing inputs ['Airline', 'Source', 'Destination', 'Dep_Session', 'Total_Stops', 'Dep_hour', 'Arrival_hour', 'Duration_mins', 'Month_of_Journey', 'Days_of_Journey', 'Day_of_Week', 'is_weekend', 'Is_Long_Flight', 'is_peak_season']. Note that there were extra inputs: [0].
+Traceback (most recent call last):
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\pyfunc\__init__.py", line 732, in _validate_prediction_input
+    data = _enforce_schema(data, input_schema, flavor)
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\models\utils.py", line 1255, in _enforce_schema
+    raise MlflowException(message)
+mlflow.exceptions.MlflowException: Model is missing inputs ['Airline', 'Source', 'Destination', 'Dep_Session', 'Total_Stops', 'Dep_hour', 'Arrival_hour', 'Duration_mins', 'Month_of_Journey', 'Days_of_Journey', 'Day_of_Week', 'is_weekend', 'Is_Long_Flight', 'is_peak_season']. Note that there were extra inputs: [0].
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\ALL Projects\Ticket\api.py", line 187, in predict
+    prediction = model.predict(input_df)
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\pyfunc\__init__.py", line 843, in predict
+    return self._predict(data, params)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\pyfunc\__init__.py", line 882, in _predict
+    data, params = _validate_prediction_input(
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        data, params, self.input_schema, self.params_schema, self.loader_module
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\pyfunc\__init__.py", line 743, in _validate_prediction_input
+    raise MlflowException.invalid_parameter_value(message)
+mlflow.exceptions.MlflowException: Failed to enforce schema of data '      0
+0  None' with schema '['Airline': string (required), 'Source': string (required), 'Destination': string (required), 'Dep_Session': string (required), 'Total_Stops': double (required), 'Dep_hour': integer (required), 'Arrival_hour': integer (required), 'Duration_mins': long (required), 'Month_of_Journey': integer (required), 'Days_of_Journey': integer (required), 'Day_of_Week': integer (required), 'is_weekend': long (required), 'Is_Long_Flight': long (required), 'is_peak_season': long (required)]'. Error: Model is missing inputs ['Airline', 'Source', 'Destination', 'Dep_Session', 'Total_Stops', 'Dep_hour', 'Arrival_hour', 'Duration_mins', 'Month_of_Journey', 'Days_of_Journey', 'Day_of_Week', 'is_weekend', 'Is_Long_Flight', 'is_peak_season']. Note that there were extra inputs: [0].
+2026-01-24 14:17:51,666 [INFO] TicketAPI: Received prediction request for Airline: Air India
+2026-01-24 14:17:51,671 [ERROR] TicketAPI: Error during prediction pipeline: Failed to enforce schema of data '      0
+0  None' with schema '['Airline': string (required), 'Source': string (required), 'Destination': string (required), 'Dep_Session': string (required), 'Total_Stops': double (required), 'Dep_hour': integer (required), 'Arrival_hour': integer (required), 'Duration_mins': long (required), 'Month_of_Journey': integer (required), 'Days_of_Journey': integer (required), 'Day_of_Week': integer (required), 'is_weekend': long (required), 'Is_Long_Flight': long (required), 'is_peak_season': long (required)]'. Error: Model is missing inputs ['Airline', 'Source', 'Destination', 'Dep_Session', 'Total_Stops', 'Dep_hour', 'Arrival_hour', 'Duration_mins', 'Month_of_Journey', 'Days_of_Journey', 'Day_of_Week', 'is_weekend', 'Is_Long_Flight', 'is_peak_season']. Note that there were extra inputs: [0].
+Traceback (most recent call last):
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\pyfunc\__init__.py", line 732, in _validate_prediction_input
+    data = _enforce_schema(data, input_schema, flavor)
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\models\utils.py", line 1255, in _enforce_schema
+    raise MlflowException(message)
+mlflow.exceptions.MlflowException: Model is missing inputs ['Airline', 'Source', 'Destination', 'Dep_Session', 'Total_Stops', 'Dep_hour', 'Arrival_hour', 'Duration_mins', 'Month_of_Journey', 'Days_of_Journey', 'Day_of_Week', 'is_weekend', 'Is_Long_Flight', 'is_peak_season']. Note that there were extra inputs: [0].
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\ALL Projects\Ticket\api.py", line 187, in predict
+    prediction = model.predict(input_df)
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\pyfunc\__init__.py", line 843, in predict
+    return self._predict(data, params)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\pyfunc\__init__.py", line 882, in _predict
+    data, params = _validate_prediction_input(
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        data, params, self.input_schema, self.params_schema, self.loader_module
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\pyfunc\__init__.py", line 743, in _validate_prediction_input
+    raise MlflowException.invalid_parameter_value(message)
+mlflow.exceptions.MlflowException: Failed to enforce schema of data '      0
+0  None' with schema '['Airline': string (required), 'Source': string (required), 'Destination': string (required), 'Dep_Session': string (required), 'Total_Stops': double (required), 'Dep_hour': integer (required), 'Arrival_hour': integer (required), 'Duration_mins': long (required), 'Month_of_Journey': integer (required), 'Days_of_Journey': integer (required), 'Day_of_Week': integer (required), 'is_weekend': long (required), 'Is_Long_Flight': long (required), 'is_peak_season': long (required)]'. Error: Model is missing inputs ['Airline', 'Source', 'Destination', 'Dep_Session', 'Total_Stops', 'Dep_hour', 'Arrival_hour', 'Duration_mins', 'Month_of_Journey', 'Days_of_Journey', 'Day_of_Week', 'is_weekend', 'Is_Long_Flight', 'is_peak_season']. Note that there were extra inputs: [0].
+2026-01-24 14:18:03,621 [INFO] TicketAPI: Received prediction request for Airline: IndiGo
+2026-01-24 14:18:03,625 [ERROR] TicketAPI: Error during prediction pipeline: Failed to enforce schema of data '      0
+0  None' with schema '['Airline': string (required), 'Source': string (required), 'Destination': string (required), 'Dep_Session': string (required), 'Total_Stops': double (required), 'Dep_hour': integer (required), 'Arrival_hour': integer (required), 'Duration_mins': long (required), 'Month_of_Journey': integer (required), 'Days_of_Journey': integer (required), 'Day_of_Week': integer (required), 'is_weekend': long (required), 'Is_Long_Flight': long (required), 'is_peak_season': long (required)]'. Error: Model is missing inputs ['Airline', 'Source', 'Destination', 'Dep_Session', 'Total_Stops', 'Dep_hour', 'Arrival_hour', 'Duration_mins', 'Month_of_Journey', 'Days_of_Journey', 'Day_of_Week', 'is_weekend', 'Is_Long_Flight', 'is_peak_season']. Note that there were extra inputs: [0].
+Traceback (most recent call last):
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\pyfunc\__init__.py", line 732, in _validate_prediction_input
+    data = _enforce_schema(data, input_schema, flavor)
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\models\utils.py", line 1255, in _enforce_schema
+    raise MlflowException(message)
+mlflow.exceptions.MlflowException: Model is missing inputs ['Airline', 'Source', 'Destination', 'Dep_Session', 'Total_Stops', 'Dep_hour', 'Arrival_hour', 'Duration_mins', 'Month_of_Journey', 'Days_of_Journey', 'Day_of_Week', 'is_weekend', 'Is_Long_Flight', 'is_peak_season']. Note that there were extra inputs: [0].
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\ALL Projects\Ticket\api.py", line 187, in predict
+    prediction = model.predict(input_df)
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\pyfunc\__init__.py", line 843, in predict
+    return self._predict(data, params)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\pyfunc\__init__.py", line 882, in _predict
+    data, params = _validate_prediction_input(
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        data, params, self.input_schema, self.params_schema, self.loader_module
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\mlflow\pyfunc\__init__.py", line 743, in _validate_prediction_input
+    raise MlflowException.invalid_parameter_value(message)
+mlflow.exceptions.MlflowException: Failed to enforce schema of data '      0
+0  None' with schema '['Airline': string (required), 'Source': string (required), 'Destination': string (required), 'Dep_Session': string (required), 'Total_Stops': double (required), 'Dep_hour': integer (required), 'Arrival_hour': integer (required), 'Duration_mins': long (required), 'Month_of_Journey': integer (required), 'Days_of_Journey': integer (required), 'Day_of_Week': integer (required), 'is_weekend': long (required), 'Is_Long_Flight': long (required), 'is_peak_season': long (required)]'. Error: Model is missing inputs ['Airline', 'Source', 'Destination', 'Dep_Session', 'Total_Stops', 'Dep_hour', 'Arrival_hour', 'Duration_mins', 'Month_of_Journey', 'Days_of_Journey', 'Day_of_Week', 'is_weekend', 'Is_Long_Flight', 'is_peak_season']. Note that there were extra inputs: [0].
+2026-01-24 14:22:24,636 [INFO] TicketAPI: Received prediction request for Airline: IndiGo
+2026-01-24 14:22:24,642 [ERROR] TicketAPI: Error during prediction pipeline: "Only a column name can be used for the key in a dtype mappings argument. 'Total_Stops' not found in columns."
+Traceback (most recent call last):
+  File "D:\ALL Projects\Ticket\api.py", line 185, in predict
+    input_df = input_df.astype({
+        'Total_Stops': 'float64',
+    ...<8 lines>...
+        'is_peak_season': 'int64'
+    })
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\generic.py", line 6627, in astype
+    raise KeyError(
+    ...<3 lines>...
+    )
+KeyError: "Only a column name can be used for the key in a dtype mappings argument. 'Total_Stops' not found in columns."
+2026-01-24 14:26:37,988 [INFO] TicketAPI: Received prediction request for Airline: IndiGo
+2026-01-24 14:26:37,990 [ERROR] TicketAPI: Error during prediction pipeline: "Only a column name can be used for the key in a dtype mappings argument. 'Total_Stops' not found in columns."
+Traceback (most recent call last):
+  File "D:\ALL Projects\Ticket\api.py", line 186, in predict
+    input_df = input_df.astype({
+        'Total_Stops': 'float64',
+    ...<8 lines>...
+        'is_peak_season': 'int64'
+    })
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\generic.py", line 6627, in astype
+    raise KeyError(
+    ...<3 lines>...
+    )
+KeyError: "Only a column name can be used for the key in a dtype mappings argument. 'Total_Stops' not found in columns."
+2026-01-24 14:26:40,011 [INFO] TicketAPI: Received prediction request for Airline: IndiGo
+2026-01-24 14:26:40,012 [ERROR] TicketAPI: Error during prediction pipeline: "Only a column name can be used for the key in a dtype mappings argument. 'Total_Stops' not found in columns."
+Traceback (most recent call last):
+  File "D:\ALL Projects\Ticket\api.py", line 186, in predict
+    input_df = input_df.astype({
+        'Total_Stops': 'float64',
+    ...<8 lines>...
+        'is_peak_season': 'int64'
+    })
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\generic.py", line 6627, in astype
+    raise KeyError(
+    ...<3 lines>...
+    )
+KeyError: "Only a column name can be used for the key in a dtype mappings argument. 'Total_Stops' not found in columns."
+2026-01-24 14:26:40,894 [INFO] TicketAPI: Received prediction request for Airline: IndiGo
+2026-01-24 14:26:40,895 [ERROR] TicketAPI: Error during prediction pipeline: "Only a column name can be used for the key in a dtype mappings argument. 'Total_Stops' not found in columns."
+Traceback (most recent call last):
+  File "D:\ALL Projects\Ticket\api.py", line 186, in predict
+    input_df = input_df.astype({
+        'Total_Stops': 'float64',
+    ...<8 lines>...
+        'is_peak_season': 'int64'
+    })
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\generic.py", line 6627, in astype
+    raise KeyError(
+    ...<3 lines>...
+    )
+KeyError: "Only a column name can be used for the key in a dtype mappings argument. 'Total_Stops' not found in columns."
+2026-01-24 14:26:55,593 [INFO] TicketAPI: Received prediction request for Airline: IndiGo
+2026-01-24 14:26:55,595 [ERROR] TicketAPI: Error during prediction pipeline: "Only a column name can be used for the key in a dtype mappings argument. 'Total_Stops' not found in columns."
+Traceback (most recent call last):
+  File "D:\ALL Projects\Ticket\api.py", line 186, in predict
+    input_df = input_df.astype({
+        'Total_Stops': 'float64',
+    ...<8 lines>...
+        'is_peak_season': 'int64'
+    })
+  File "C:\Users\Hedaya_city\AppData\Local\Programs\Python\Python313\Lib\site-packages\pandas\core\generic.py", line 6627, in astype
+    raise KeyError(
+    ...<3 lines>...
+    )
+KeyError: "Only a column name can be used for the key in a dtype mappings argument. 'Total_Stops' not found in columns."
+2026-01-24 14:30:17,193 [INFO] TicketAPI: Received prediction request for Airline: Jet Airways
+2026-01-24 14:30:17,227 [INFO] TicketAPI: Prediction successful: 5809.5244140625 | Latency: 34.16ms
+2026-01-24 23:51:59,097 [INFO] TicketAPI: Received prediction request for Airline: IndiGo
+2026-01-24 23:51:59,121 [INFO] TicketAPI: Prediction successful: 4470.1640625 | Latency: 23.88ms
+2026-01-25 03:38:00,355 [INFO] TicketAPI: Received prediction request for Airline: IndiGo
+2026-01-25 03:38:00,385 [INFO] TicketAPI: Prediction successful: 4538.353515625 | Latency: 30.57ms
+2026-01-25 03:40:54,293 [INFO] TicketAPI: Received prediction request for Airline: Multiple carriers
+2026-01-25 03:40:54,309 [INFO] TicketAPI: Prediction successful: 4880.291015625 | Latency: 16.11ms

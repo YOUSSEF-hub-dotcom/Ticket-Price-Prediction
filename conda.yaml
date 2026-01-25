@@ -1,0 +1,16 @@
+name: ticket_price_env
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.9
+  - pip
+  - pip:
+      - mlflow
+      - pandas
+      - numpy
+      - scikit-learn
+      - matplotlib
+      - seaborn
+      - xgboost
+      - openpyxlt

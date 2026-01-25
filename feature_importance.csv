@@ -1,0 +1,11 @@
+Feature,Importance
+Is_Long_Flight,0.2218445
+Duration_mins,0.11805433
+Destination_Cochin,0.114508264
+Airline_Jet Airways,0.06887234
+Destination_Delhi,0.062320996
+Airline_IndiGo,0.05801564
+Destination_New Delhi,0.029394647
+is_peak_season,0.02920897
+Source_Mumbai,0.026484877
+Airline_Air India,0.026231134

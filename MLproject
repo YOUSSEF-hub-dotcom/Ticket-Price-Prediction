@@ -1,0 +1,14 @@
+name: Flight_Ticket_Price_Prediction
+
+conda_env: conda.yaml
+
+entry_points:
+  main:
+    parameters:
+      data_path: {type: str, default: "D:/ALL Projects/Ticket/Flight Ticket Price.xlsx"}
+      n_estimators: {type: int, default: 1500}
+      max_depth: {type: int, default: 11}
+      learning_rate: {type: float, default: 0.05}
+    command: "python main.py --data_path {data_path} --n_estimators {n_estimators} --max_depth {max_depth} --learning_rate {learning_rate}"
+
+
