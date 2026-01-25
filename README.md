@@ -1,271 +1,233 @@
-🎟️ Flight Ticket Price Prediction Project
+# ✈️ Flight Ticket Price Prediction
 
-A complete end-to-end Machine Learning project for predicting flight ticket prices, starting from raw data cleaning & advanced EDA, through feature engineering and model training, and ending with full MLOps lifecycle using MLflow, including model registry and production gating.
+An **end-to-end Machine Learning project** that predicts flight ticket prices using structured data, advanced feature engineering, and a full **MLOps lifecycle with MLflow**.
+The project is built with a **Data Scientist / ML Engineer mindset**, focusing on clean pipelines, explainability, reproducibility, and production readiness.
 
-This project is built with a Data Scientist / ML Engineer mindset, focusing on:
+---
 
-Robust preprocessing
+## 🚀 Project Overview
 
-Strong evaluation strategy
+The objective of this project is to **predict flight ticket prices** based on multiple factors such as:
 
-Hyperparameter optimization
+* Airline
+* Route (Source → Destination)
+* Number of stops
+* Departure & arrival times
+* Flight duration
+* Travel date & seasonality
 
-Reproducibility & production readiness
+The solution covers the complete ML lifecycle:
+**Data Cleaning → EDA → Feature Engineering → Modeling → Hyperparameter Tuning → MLflow Tracking → Model Registry → Production Gate**.
 
-🚀 Project Overview
+---
 
-The goal of this project is to predict flight ticket prices accurately based on multiple factors such as airline, route, duration, departure time, number of stops, and seasonality.
+## 🧠 Project Architecture
 
-The solution includes:
-
-Advanced data cleaning & preprocessing
-
-Deep Exploratory Data Analysis (EDA)
-
-Feature engineering driven by domain knowledge
-
-XGBoost regression with hyperparameter tuning
-
-Cross-validation for stability
-
-MLflow experiment tracking & model registry
-
-Automatic quality gate for Production vs Staging
-
-🧠 Project Architecture
+```
 Flight_Ticket_Price_Prediction/
 │
-├── data.py                  # Data loading, cleaning & feature engineering
-├── eda_visualization.py     # EDA & visual analytics
-├── model.py                 # Model training & hyperparameter tuning
-├── MLflow_LifeCycle.py      # MLflow tracking, registry & quality gate
-├── main.py                  # End-to-end pipeline entry point
+├── data.py                   # Data cleaning & feature engineering
+├── eda_visualization.py      # EDA & business-driven analysis
+├── model.py                  # Model training & tuning (XGBoost)
+├── MLflow_LifeCycle.py       # MLflow tracking & Model Registry
+├── main.py                   # Pipeline entry point
 │
-├── MLproject                # MLflow Project configuration
-├── conda.yaml               # Conda environment
-├── README.md
+├── MLproject                 # MLflow project configuration
+├── conda.yaml                # Conda environment
+└── README.md
+```
 
-📊 Dataset
+---
 
-Source: Flight Ticket Price Dataset (Excel format)
+## 📊 Dataset Description
 
-Target Variable:
+* **Format**: Excel (.xlsx)
+* **Target Variable**: `Price`
+* **Key Columns**:
 
-Price → Flight ticket price (log-transformed during training)
+  * Airline, Source, Destination
+  * Total_Stops
+  * Dep_Time, Arrival_Time
+  * Duration
+  * Date_of_Journey
 
-Key Features:
+---
 
-Airline
+## 🧹 Data Cleaning & Preprocessing
 
-Source / Destination
+Key preprocessing steps:
 
-Total Stops
+* Converted `Date_of_Journey` to datetime and extracted:
 
-Departure & Arrival Time
+  * Day, Month, Day of Week, Quarter
+* Extracted hour & minute from departure and arrival times
+* Converted flight duration into **total minutes**
+* Mapped `Total_Stops` to numerical values
+* Removed redundant & low-value columns:
 
-Flight Duration
+  * Route, Additional_Info, raw time columns
+* Removed **duplicate rows** to prevent data leakage
+* Handled missing values using **mode imputation**
 
-Journey Date (Month, Day, Weekday, Quarter)
+---
 
-🧹 Data Cleaning & Preprocessing
+## 📐 Feature Engineering
 
-Key steps applied:
+New features created to capture real-world flight behavior:
 
-Datetime parsing (Date_of_Journey)
+* `Dep_Session` (Early Morning / Morning / Evening / Night)
+* `Is_Long_Flight` (Duration > 8 hours)
+* `is_weekend`
+* `is_peak_season`
+* `Path` (Source-Destination)
 
-Time feature extraction (hours & minutes)
+### 📉 Target Transformation
 
-Duration conversion to minutes
+* Detected **right skewness** in ticket prices
+* Applied **log transformation** (`log1p`) to stabilize variance
+* Removed price outliers using **IQR method**
 
-Mapping categorical stops to numeric values
+---
 
-Dropping redundant & low-value columns
+## 🔍 Exploratory Data Analysis (EDA)
 
-Removing duplicated rows (222 rows)
+Business-driven questions answered:
 
-Handling missing values
+* How do prices vary across airlines?
+* Do more stops increase ticket prices?
+* Are morning flights more expensive than night flights?
+* Does seasonality affect pricing?
+* How does flight duration correlate with price?
 
-Log transformation of target to treat right skew
+Visualizations used:
 
-Outlier detection using IQR (removed extreme prices)
+* Histograms & KDE plots
+* Boxplots & violin plots
+* Correlation analysis
+* Heatmaps & trend analysis
 
-📌 Result: Clean, stable, and model-ready dataset
+---
 
-🔍 Exploratory Data Analysis (EDA)
+## 🤖 Model Training
 
-EDA focused on answering real business questions, such as:
+### Pipeline Components
 
-How do prices vary across airlines?
+* **Categorical Features** → OneHotEncoder
+* **Numerical Features** → Passed directly
+* **Model** → XGBoost Regressor
 
-Are non-stop flights always more expensive?
+### Training Strategy
 
-Does duration strongly affect ticket price?
+* Train/Test split: **80/20**
+* 5-Fold Cross Validation for stability
+* Sample weighting to improve generalization
+* Hyperparameter tuning using:
 
-Are weekend or peak-season flights pricier?
+  * RandomizedSearchCV
+  * GridSearchCV
 
-How do route & season interact?
+---
 
-Visualizations include:
+## 📈 Model Performance
 
-Histograms & boxplots
+| Metric        | Value      |
+| ------------- | ---------- |
+| R² Score      | **0.863**  |
+| MAE           | **1404**   |
+| RMSLE         | **0.192**  |
+| CV MAE (mean) | **0.129**  |
+| CV MAE (std)  | **0.0028** |
 
-Violin plots
+✅ Low CV variance indicates a **stable and reliable model**.
 
-Scatter & regression plots
+---
 
-Pivot tables & heatmaps
+## 🧪 Experiment Tracking with MLflow
 
-Multi-factor interaction analysis
+Tracked artifacts and metadata:
 
-🧠 Feature Engineering
+* Hyperparameters (Random + Grid Search)
+* Evaluation metrics
+* Feature importance
+* Model artifacts
+* Input/output signature
 
-New features created:
+### 🔄 MLflow Lifecycle
 
-Duration_mins
+1. Experiment Tracking
+2. PyFunc Model Wrapping
+3. Model Signature & Input Schema
+4. Model Registry
+5. Automated Quality Gate
 
-Dep_hour, Arrival_hour
+### 🚦 Production Gate
 
-Day_of_Week, Month_of_Journey, Quarter
+```python
+if r2 >= 0.85 and rmsle <= 0.20:
+    → Production 🚀
+else:
+    → Staging 🛑
+```
 
-is_weekend
+---
 
-is_peak_season
+## 📦 Model Packaging
 
-Dep_Session (Early Morning → Night)
+* Model logged as **MLflow PyFunc**
+* Accepts structured DataFrame input
+* Returns predicted ticket price in original scale
 
-Is_Long_Flight
+---
 
-Path (Source → Destination)
+## ▶️ Run the Project
 
-📌 All transformations are reproducible and pipeline-safe.
+Using MLflow:
 
-🤖 Model Training
-
-Problem Type: Regression
-
-Model Used:
-
-XGBoost Regressor (XGBRegressor)
-
-Pipeline:
-
-OneHotEncoding for categorical features
-
-Numerical features passed directly
-
-End-to-end sklearn Pipeline
-
-Validation Strategy:
-
-Train / Test split: 80% / 20%
-
-K-Fold Cross Validation (5 folds)
-
-Sample weighting to handle price scale
-
-Hyperparameter Tuning:
-
-RandomizedSearchCV (broad exploration)
-
-GridSearchCV (fine-tuning)
-
-📈 Model Performance
-Metric	Value
-CV MAE (Mean)	0.1297
-CV MAE (Std)	0.0029
-MAE (Actual Price)	1404.36
-R² Score	0.8633
-RMSLE	0.1923
-
-📌 Metrics were computed on original price scale after inverse log transformation.
-
-🧪 Experiment Tracking with MLflow
-
-Tracked using MLflow:
-
-Hyperparameters
-
-Cross-validation metrics
-
-Final evaluation metrics
-
-Feature importance
-
-Model artifacts
-
-Input examples & model signature
-
-🔁 MLflow Lifecycle & Quality Gate
-
-Model Registry Flow:
-
-Log model as MLflow PyFunc
-
-Register model → TicketPricePredictor
-
-Move to Staging
-
-Apply Quality Gate
-
-🚦 Quality Gate Rules
-R2 ≥ 0.85
-RMSLE ≤ 0.20
-
-
-✅ Passed → Production 🚀
-
-❌ Failed → Staging 🛑
-
-📦 This ensures only high-quality models reach production.
-
-📦 Model Packaging
-
-Wrapped as MLflow PyFunc
-
-Framework-agnostic
-
-Accepts pandas DataFrame
-
-Outputs predicted ticket price (original scale)
-
-⚙️ MLflow Project
-
-Run the entire pipeline using:
-
+```bash
 mlflow run . \
+  -P data_path="path/to/Flight Ticket Price.xlsx" \
   -P n_estimators=1500 \
   -P max_depth=11 \
   -P learning_rate=0.05
+```
 
-🐍 Environment Setup
-name: ticket_price_env
+---
+
+## 🐍 Environment Setup
+
+```yaml
 python: 3.9
 libraries:
-- mlflow
 - pandas
 - numpy
 - scikit-learn
+- xgboost
+- mlflow
 - matplotlib
 - seaborn
-- xgboost
+```
 
-🎯 Key Takeaways
+---
 
-Strong EDA-driven feature engineering
+## 🎯 Key Takeaways
 
-Robust regression modeling
+* Strong **feature engineering** drives performance
+* Proper **EDA** leads to better modeling decisions
+* MLflow enables **reproducibility & governance**
+* Automated quality gates ensure **safe production deployment**
 
-Proper evaluation on transformed targets
+---
 
-Real MLOps lifecycle (not just training)
+## 👨‍💻 Author
 
-Production-quality ML project structure
-
-👨‍💻 Author
-
-Youssef Mahmoud
+**Youssef Mahmoud**
 Faculty of Computers & Information
-Aspiring Data Scientist / ML Engineer
+Aspiring **Data Scientist / ML Engineer**
+
+---
+
+⭐ If you find this project useful, consider giving it a star on GitHub!
+
 
 🔗 LinkedIn:
 [https://www.linkedin.com/in/youssef-mahmoud-63b243361
