@@ -66,14 +66,25 @@ app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 
-
+"""
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
+"""
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:8501",
+        "http://127.0.0.1:8501",
+    ],
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_headers=["*"],
+    allow_credentials=True,
+)
 
 @app.middleware("http")
 async def add_process_time_header(request: Request, call_next):
@@ -82,7 +93,6 @@ async def add_process_time_header(request: Request, call_next):
     process_time = time.time() - start_time
     response.headers["X-Process-Time"] = str(process_time)
     return response
-
 
 
 MODEL_URI = "models:/TicketPricePredictor/Production"
@@ -209,6 +219,7 @@ async def predict(request: Request,payload: TicketRequestSimplified, background_
         logger.error(f"Error during prediction pipeline: {str(e)}", exc_info=True)
         raise HTTPException(status_code=400, detail=f"Data Transformation Error: {str(e)}")
 
-app.get("/history")
+
+@app.get("/history")
 def get_history(db: Session = Depends(get_db)):
     return db.query(PriceHistory).order_by(PriceHistory.search_time.desc()).limit(5).all()
