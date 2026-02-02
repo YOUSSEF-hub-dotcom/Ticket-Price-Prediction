@@ -1,11 +1,14 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import logging
+
+logger = logging.getLogger(__name__)
 
 def run_eda(df):
-    print("=========== EDA & Visualization ==========")
+    logger.info("=========== EDA & Visualization ==========")
 
-    print("What is the distribution of airfare prices?")
+    logger.info("What is the distribution of airfare prices?")
     print(df['Price'].describe())
 
     plt.figure(figsize=(8,5))
@@ -15,8 +18,7 @@ def run_eda(df):
     plt.ylabel("Frequency")
     plt.show()
 
-    print("--------------------------")
-    print("Does the ticket price vary depending on the airline?")
+    logger.info("Does the ticket price vary depending on the airline?")
     ticket_price_per_Airline = df.groupby('Airline')['Price'].agg(['mean', 'median', 'std']).sort_values(by='mean', ascending=False)
     print(ticket_price_per_Airline)
 
@@ -26,8 +28,7 @@ def run_eda(df):
     plt.xticks(rotation=45)
     plt.show()
 
-    print("--------------------------")
-    print("Are there airlines whose prices are noticeably higher than others?")
+    logger.info("Are there airlines whose prices are noticeably higher than others?")
     Avg_Price_Airline = df.groupby('Airline')['Price'].mean().sort_values(ascending=False)
     print(Avg_Price_Airline)
 
@@ -38,8 +39,7 @@ def run_eda(df):
     plt.ylabel("Airline")
     plt.show()
 
-    print("--------------------------")
-    print("Is the price difference within the same airline significant?")
+    logger.info("Is the price difference within the same airline significant?")
     STD_Price_Airline = df.groupby('Airline')['Price'].std().sort_values(ascending=False)
     print(STD_Price_Airline)
 
@@ -49,9 +49,8 @@ def run_eda(df):
     plt.xticks(rotation=45)
     plt.show()
 
-    print("--------------------------")
 
-    print("Does the departure city(Source) affect the ticket price?")
+    logger.info("Does the departure city(Source) affect the ticket price?")
     Avg_Price_Source = df.groupby('Source')['Price'].mean().sort_values(ascending=False)
     print(Avg_Price_Source)
 
@@ -60,8 +59,7 @@ def run_eda(df):
     plt.title("Ticket Price by Source City")
     plt.show()
 
-    print("--------------------------")
-    print("Does the arrival city(Destination) affect the ticket price?")
+    logger.info("Does the arrival city(Destination) affect the ticket price?")
     Avg_Price_Destination = df.groupby('Destination')['Price'].mean().sort_values(ascending=False)
     print(Avg_Price_Destination)
 
@@ -70,8 +68,7 @@ def run_eda(df):
     plt.title("Ticket Price by Destination City")
     plt.show()
 
-    print("--------------------------")
-    print("Does the ticket price vary depending on the number of stops?")
+    logger.info("Does the ticket price vary depending on the number of stops?")
     TotalStops_Price_of_Ticket = df.groupby('Total_Stops')['Price'].agg(['mean', 'median', 'std'])
     print(TotalStops_Price_of_Ticket)
 
@@ -82,9 +79,8 @@ def run_eda(df):
     plt.ylabel("Price")
     plt.show()
 
-    print("--------------------------")
 
-    print("Does the departure time(Dep_hour) affect the ticket price?")
+    logger.info("Does the departure time(Dep_hour) affect the ticket price?")
     Dep_hour_affectOnPrice = df.groupby('Dep_hour')['Price'].mean().head()
     print(Dep_hour_affectOnPrice)
 
@@ -94,8 +90,7 @@ def run_eda(df):
     plt.grid()
     plt.show()
 
-    print("--------------------------")
-    print("Are morning flights more expensive than night flights?")
+    logger.info("Are morning flights more expensive than night flights?")
     Deep_Session_per_price = df.groupby('Dep_Session')['Price'].mean().sort_values(ascending=False)
     print(Deep_Session_per_price)
 
@@ -104,9 +99,8 @@ def run_eda(df):
     plt.title("Average Price by Departure Session")
     plt.show()
 
-    print("--------------------------")
 
-    print("Does the arrival time affect the price?")
+    logger.info("Does the arrival time affect the price?")
     Arrival_time_affectOnPrice = df.groupby('Arrival_hour')['Price'].mean().head()
     print(Arrival_time_affectOnPrice)
 
@@ -116,8 +110,7 @@ def run_eda(df):
     plt.grid()
     plt.show()
 
-    print("--------------------------")
-    print('Does the duration of the trip affect the ticket price?')
+    logger.info('Does the duration of the trip affect the ticket price?')
     print(df[['Duration_mins','Price']].corr())
 
     plt.figure(figsize=(8,5))
@@ -125,8 +118,7 @@ def run_eda(df):
     plt.title("Price vs Flight Duration")
     plt.show()
 
-    print("--------------------------")
-    print('Is the relationship between flight duration and price linear?')
+    logger.info('Is the relationship between flight duration and price linear?')
     print(df[['Duration_mins','Price']].corr(method='pearson'))
 
     plt.figure(figsize=(8,5))
@@ -134,8 +126,7 @@ def run_eda(df):
     plt.title("Linear Relationship Between Duration and Price")
     plt.show()
 
-    print("--------------------------")
-    print('Are long flights always more expensive than short flights?')
+    logger.info('Are long flights always more expensive than short flights?')
     print(df.groupby('Is_Long_Flight')['Price'].mean())
 
     plt.figure(figsize=(6,5))
@@ -143,9 +134,8 @@ def run_eda(df):
     plt.title("Price Comparison: Long vs Short Flights")
     plt.show()
 
-    print("--------------------------")
 
-    print('Does the ticket price vary depending on the day of the trip?')
+    logger.info('Does the ticket price vary depending on the day of the trip?')
     print(df.groupby('Day_of_Week')['Price'].mean())
 
     plt.figure(figsize=(8,5))
@@ -153,9 +143,8 @@ def run_eda(df):
     plt.title("Average Price by Day of Week")
     plt.show()
 
-    print("--------------------------")
 
-    print('Are weekend trips more expensive than other days?')
+    logger.info('Are weekend trips more expensive than other days?')
     print(df.groupby('is_weekend')['Price'].mean())
 
     plt.figure(figsize=(6,5))
@@ -163,9 +152,8 @@ def run_eda(df):
     plt.title("Weekend vs Weekday Prices")
     plt.show()
 
-    print("--------------------------")
 
-    print('Does the ticket price vary from month to month?')
+    logger.info('Does the ticket price vary from month to month?')
     print(df.groupby('Month_of_Journey')['Price'].mean())
 
     plt.figure(figsize=(10,5))
@@ -174,9 +162,8 @@ def run_eda(df):
     plt.title("Average Price by Month")
     plt.show()
 
-    print("--------------------------")
 
-    print('Does the peak season lead to higher prices?')
+    logger.info('Does the peak season lead to higher prices?')
     print(df.groupby('is_peak_season')['Price'].mean())
 
     plt.figure(figsize=(6,5))
@@ -185,9 +172,7 @@ def run_eda(df):
     plt.show()
 
 
-    print("--------------------------")
-
-    print("Does the airline's impact on price vary depending on the number of stops?")
+    logger.info("Does the airline's impact on price vary depending on the number of stops?")
     Airline_Price_Total_Stops = pd.pivot_table(df, values='Price', index='Airline', columns='Total_Stops', aggfunc='mean')
     print(Airline_Price_Total_Stops)
 
@@ -198,9 +183,8 @@ def run_eda(df):
     plt.title("Airline vs Stops (Average Price)")
     plt.show()
 
-    print("--------------------------")
 
-    print('Does the effect of the departure time differ between days of the week?')
+    logger.info('Does the effect of the departure time differ between days of the week?')
     Dep_hour_Day_of_Week_onPrice = pd.pivot_table(df, values='Price', index='Dep_hour', columns='Day_of_Week', aggfunc='mean').head()
     print(Dep_hour_Day_of_Week_onPrice)
 
@@ -212,9 +196,8 @@ def run_eda(df):
     plt.title("Departure Hour vs Day of Week (Price)")
     plt.show()
 
-    print("--------------------------")
 
-    print('Does the price of the route change during peak season compared to regular seasons?')
+    logger.info('Does the price of the route change during peak season compared to regular seasons?')
     Path_is_Peak_Session_onPrice = pd.pivot_table(df, values='Price', index='Path', columns='is_peak_season', aggfunc='mean')
     print(Path_is_Peak_Session_onPrice)
 
@@ -226,8 +209,7 @@ def run_eda(df):
     plt.title("Path Price in Peak vs Non-Peak Season")
     plt.show()
 
-    print("--------------------------")
-    print('What is the impact of (airline + number of stops + flight duration) on the price?')
+    logger.info('What is the impact of (airline + number of stops + flight duration) on the price?')
     impactOf_Air_Total_Dura_onPrice = df.groupby(['Airline','Total_Stops'])[['Duration_mins','Price']].mean().head()
     print(impactOf_Air_Total_Dura_onPrice)
 
