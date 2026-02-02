@@ -5,7 +5,11 @@ import model
 import MLflow_LifeCycle
 import eda_visualization
 
+import logging
+from logger_config import setup_logging
+setup_logging()
 
+logger = logging.getLogger(__name__)
 def main():
     parser = argparse.ArgumentParser(description="Flight Ticket Price Prediction Pipeline")
 
@@ -20,31 +24,31 @@ def main():
     args = parser.parse_args()
 
     print("\n" + "=" * 60)
-    print("🚀 Flight Ticket Price Prediction System is Starting...")
+    logger.info("🚀 Flight Ticket Price Prediction System is Starting...")
     print("=" * 60)
 
-    print("\nStep 1: Cleaning and Preprocessing Data...")
+    logger.info("\nStep 1: Cleaning and Preprocessing Data...")
 
     if not os.path.exists(args.data_path):
         print(f"❌ Error: File not found at {args.data_path}")
         return
 
     df_cleaned = data.run_data_pipeline(args.data_path)
-    print(f"✅ Data processed successfully. Shape: {df_cleaned.shape}")
+    logger.info(f"✅ Data processed successfully. Shape: {df_cleaned.shape}")
 
-    print("\nStep 1.5: Exploratory Data Analysis (EDA & Visualization)...")
+    logger.info("\nStep 1.5: Exploratory Data Analysis (EDA & Visualization)...")
     eda_visualization.run_eda(df_cleaned)
 
-    print("\nStep 2: Training Model with Hyperparameter Tuning...")
+    logger.info("\nStep 2: Training Model with Hyperparameter Tuning...")
     training_results = model.train_model(
         df=df_cleaned,
         n_estimators=args.n_estimators,
         max_depth=args.max_depth,
         learning_rate=args.learning_rate
     )
-    print("✅ Model training and evaluation completed.")
+    logger.info("✅ Model training and evaluation completed.")
 
-    print("\nStep 3: Managing MLflow Lifecycle (Logging & Registry)...")
+    logger.info("\nStep 3: Managing MLflow Lifecycle (Logging & Registry)...")
 
     X_train = training_results['X_train']
     X = training_results['X']
@@ -55,10 +59,10 @@ def main():
         X=X
     )
 
-    print("\n" + "=" * 60)
-    print(f"🎉 Pipeline Execution Finished Successfully!")
-    print(f"🆔 Run ID: {run_id}")
-    print("=" * 60 + "\n")
+    logger.info("\n" + "=" * 60)
+    logger.info(f"🎉 Pipeline Execution Finished Successfully!")
+    logger.info(f"🆔 Run ID: {run_id}")
+    logger.info("=" * 60 + "\n")
 
 
 if __name__ == "__main__":
