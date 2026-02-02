@@ -7,6 +7,8 @@ import numpy as np
 import pandas as pd
 from mlflow.models.signature import infer_signature
 from mlflow.tracking import MlflowClient
+import logging
+logger = logging.getLogger(__name__)
 
 
 class TicketPriceModelWrapper(mlflow.pyfunc.PythonModel):
@@ -21,13 +23,20 @@ class TicketPriceModelWrapper(mlflow.pyfunc.PythonModel):
             model_input = pd.DataFrame(model_input, columns=self.feature_names)
 
         model_input = model_input[self.feature_names]
+        logger.info(f"Predicting Price for {len(model_input)} Ticket.")
 
         log_preds = self.model.predict(model_input)
-        return np.expm1(log_preds)
+        final_preds = np.expm1(log_preds)
+        logger.info(f"Predictions generated: Mean={final_preds.mean():.2f}, Max={final_preds.max():.2f}")
+
+        if (final_preds < 0).any():
+            logger.warning("Negative prices detected in predictions! Check feature scaling or model bias.")
+
+        return final_preds
 
 
 def run_mlflow_lifecycle(training_results, X_train, X):
-    print("\n" + "=" * 20 + " MLflow LifeCycle " + "=" * 20)
+    logger.info("\n" + "=" * 20 + " MLflow LifeCycle " + "=" * 20)
 
     final_model = training_results['model']
     rmsle = training_results['rmsle']
@@ -53,6 +62,9 @@ def run_mlflow_lifecycle(training_results, X_train, X):
         mlflow.log_param("rs_n_estimators_list",str(training_results.get('search_space_random').get('model__n_estimators')))
         mlflow.log_param("rs_max_depth_list", str(training_results.get('search_space_random').get('model__max_depth')))
         mlflow.log_param("gs_gamma_options", str(training_results.get('search_space_grid').get('model__gamma')))
+
+        logger.info(
+            f"Exporting Search Spaces: Random ({len(training_results.get('search_space_random'))} params), Grid ({len(training_results.get('search_space_grid'))} params)")
 
         for k, v in best_params.items():
             mlflow.log_param(k, v)
@@ -116,6 +128,9 @@ def run_mlflow_lifecycle(training_results, X_train, X):
             archive_existing_versions=True
         )
 
+        test_mae = float(mae)
+        cv_mae = float(training_results.get('cv_mae_mean', 0))
+
         if r2 >= 0.85 and rmsle <= 0.20:
             client.transition_model_version_stage(
                 name=model_name,
@@ -124,12 +139,19 @@ def run_mlflow_lifecycle(training_results, X_train, X):
                 archive_existing_versions=True
             )
             status = "Production 🚀"
+            logger.info(f"🚀 Model Promoted! Metrics: R2={r2:.2%}, RMSLE={rmsle:.4f}")
+            if abs(test_mae - cv_mae) > (0.2 * cv_mae):
+                logger.warning(
+                    f"Significant gap between CV MAE ({cv_mae:.2f}) and Test MAE ({test_mae:.2f}). Model might be overfitting.")
+
         else:
             status = "Staging 🛑 (Quality Gate Failed)"
+            logger.error(f"⚠️ Quality Gate Failed. Status: Staging. (Required: R2>0.85, Current: {r2:.2f})")
 
-        print(f"📦 Model Version: {model_version}")
-        print(f"🏷️ Final Status: {status}")
-        print(f"🆔 Run ID: {run_id}")
-        print("=" * 50)
+        logger.info(f"📦 Model Version: {model_version}")
+        logger.info(f"🏷️ Final Status: {status}")
+        logger.info(f"🆔 Run ID: {run_id}")
+        logger.info("=" * 50)
 
         return run_id
+
