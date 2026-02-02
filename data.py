@@ -1,36 +1,41 @@
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 def run_data_pipeline(file_path):
     df = pd.read_excel(file_path)
+    logger.info("Loading Dataset ....")
     pd.set_option('display.width', None)
 
     print(df.head(30))
 
-    print("=========== Basic Functions ==========")
-    print("information about data:")
+    logger.info("=========== Basic Functions ==========")
+    logger.info("information about data:")
     print(df.info())
 
-    print("Statistical Operations:")
+    logger.info("Statistical Operations:")
     print(df.describe())
 
-    print("Columns:")
+    logger.info("Columns:")
     print(df.columns)
 
-    print("number of rows & columns:")
+    logger.info("number of rows & columns:")
     print(df.shape)
 
-    print("Column types:")
+    logger.info("Column types:")
     print(df.dtypes)
 
-    print("=========== Data Cleaning ==========")
+    logger.info("=========== Data Cleaning ==========")
     # ['Airline', 'Source', 'Destination', 'Arrival_Time', 'Duration',
     # 'Total_Stops', 'Additional_Info', 'Price', 'Date_of_Journey', 'Route', 'Dep_Time']
 
-    print("Validate DataType:")
+    logger.info("Validate DataType:")
     df["Date_of_Journey"] = pd.to_datetime(df["Date_of_Journey"], dayfirst=True)
 
     # extract hours and minute from  Dep_Time
@@ -77,20 +82,21 @@ def run_data_pipeline(file_path):
     # Therefore, it will not provide educational value to the model and may cause Overfitting , High variance, Noise.
     df.drop('Additional_Info', axis=1, inplace=True)
 
-    print("number of frequency rows")
+    logger.info("number of frequency rows")
     print(df.duplicated().sum())
 
     # we found 222 rows duplicated data this big problem (Overfitting ,Data Leakage ) so we must delete it
     df.drop_duplicates(inplace=True)
     print(f"Dataset shape after removing duplicates: {df.shape}")
 
-    print("missing values:")
+    logger.info("missing values:")
     print(df.isnull().sum())
-    print("----------")
 
-    df["Total_Stops"] = df["Total_Stops"].fillna(df["Total_Stops"]).mode()[0]
+    mode_val = df["Total_Stops"].mode()[0]
+    df["Total_Stops"] = df["Total_Stops"].fillna(mode_val)
+    logger.info(f"Filled missing Total_Stops with mode: {mode_val}")
+
     print(df.isnull().sum())
-    # الرسم البياني للمفقودات (اختياري بقاؤه داخل الدالة)
     sns.heatmap(df.isnull(), cmap="YlOrRd")
     plt.title(" No Missing Values")
     plt.show()
@@ -98,11 +104,11 @@ def run_data_pipeline(file_path):
     print(df.head(30))
     print(df.dtypes)
 
-    print("=========== Data Preprocessing ==========")
+    logger.info("=========== Data Preprocessing ==========")
 
     # Price Skew
     skew_value = df['Price'].skew()
-    print("Skew Value of Price:", skew_value)
+    logger.info("Skew Value of Price:", skew_value)
 
     sns.histplot(df['Price'], kde=True)
     plt.title("Distribution of Price Before Treatment Skew")
@@ -112,7 +118,7 @@ def run_data_pipeline(file_path):
     df['Price'] = np.log1p(df['Price'])
 
     treat_skew_price = df['Price'].skew()
-    print("Treatment Skew of Price:", treat_skew_price)
+    logger.info(f"Treatment Skew of Price:{ treat_skew_price}")
     # now it become : -2
     sns.histplot(df['Price'], kde=True)
     plt.title("Distribution of Price After Treatment Skew (Log Transformation)")
@@ -133,8 +139,8 @@ def run_data_pipeline(file_path):
     Upper = Q3 + 1.5 * IQR
 
     outliers = df[(df['Price'] < Lower) | (df['Price'] > Upper)]
-    print("Outliers Detect:", outliers)
-    print("Percentage of Outliers", len(outliers) / len(df) * 100, "%")
+    logger.info("Outliers Detect:", outliers)
+    logger.info(f"Percentage of Outliers {len(outliers) / len(df) * 100} %")
     # Percentage of Outliers 0.08603383997705764 %
 
     sns.boxplot(df['Price'], color='blue')
@@ -147,7 +153,6 @@ def run_data_pipeline(file_path):
 
     print("--------------------")
 
-    # نكرر التحويل للتأكد (كما في الكود الأصلي)
     df["Date_of_Journey"] = pd.to_datetime(df["Date_of_Journey"], dayfirst=True)
     df['Year_of_Journey'] = df['Date_of_Journey'].dt.year.nunique()
     df['Month_of_Journey'] = df['Date_of_Journey'].dt.month
@@ -164,6 +169,8 @@ def run_data_pipeline(file_path):
     df['is_weekend'] = df['Day_of_Week'].apply(lambda x: 1 if x >= 4 else 0)
 
     df['Path'] = df['Source'] + "-" + df['Destination']
+    top_path = df['Path'].mode()[0]
+    logger.info(f"Most frequent flight path: {top_path}")
 
     def assign_session(hour):
         if (hour >= 4) and (hour < 8):
@@ -188,3 +195,4 @@ def run_data_pipeline(file_path):
     print(df.head(30))
 
     return df
+
